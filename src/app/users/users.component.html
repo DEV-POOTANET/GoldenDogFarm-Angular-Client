@@ -1,0 +1,242 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-right">
+          <h4 class="mb-0 text-primary fw-bold">
+            <i class="fas fa-users me-2"></i>
+            จัดการผู้ใช้งาน
+          </h4>
+          <button class="btn btn-primary  ms-auto" data-bs-target="#modalAddUser" data-bs-toggle="modal" (click)="resetForm()">
+            <i class="fa fa-plus"></i> เพิ่มข้อมูลผู้ใช้งาน
+          </button>
+        </div>
+
+
+        <div class="card-body">
+          <!-- Search and Filter Section -->
+          <div class="row mb-4 gx-2 gy-3">
+            <div class="col-12 col-md-4 col-lg-3">
+              <label class="fw-semibold">ค้นหาตามชื่อ</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-search text-muted"></i>
+                </span>
+                <input type="text" class="form-control border-start-0 ps-0" placeholder="กรอกชื่อ..."
+                       [(ngModel)]="searchName" (keyup.enter)="searchUsers()">
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4 col-lg-3">
+              <label class=" fw-semibold">กรองตามบทบาท</label>
+              <select class="form-select" [(ngModel)]="selectedRole" (change)="searchUsers()">
+                <option value="">ทั้งหมด</option>
+                <option value="A">ผู้ดูแลระบบ (Admin)</option>
+                <option value="S">พนักงาน (Staff)</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-4 col-lg-2">
+              <label class="fw-semibold">จำนวนต่อหน้า</label>
+              <select class="form-select" [(ngModel)]="pageSize" (change)="changePageSize()">
+                <option [value]="5">5</option>
+                <option [value]="10">10</option>
+                <option [value]="20">20</option>
+                <option [value]="50">50</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-12 col-lg-4 d-flex align-items-end">
+              <button class="btn btn-primary w-100 mt-3 mt-lg-0" (click)="searchUsers()" [disabled]="loading">
+                <i class="fas fa-search me-2"></i>
+                ค้นหา
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <!-- Loading Spinner -->
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">กำลังโหลด...</span>
+            </div>
+            <p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p>
+          </div>
+
+          <!-- User Table -->
+          <div *ngIf="!loading" class="table-responsive">
+            <table class="table table-hover align-middle table-sm">
+              <thead class="table-light">
+              <tr>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-hashtag me-1"></i>ID
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-user me-1"></i>ชื่อ
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-envelope me-1"></i>อีเมล
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-phone me-1"></i>เบอร์
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-user-tag me-1"></i>บทบาท
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-circle me-1"></i>สถานะ
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-gear me-1"></i>จัดการ
+                </th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr *ngFor="let user of users; let i = index" class="border-bottom" [class.table-active]="i % 2 === 0">
+                <td class="text-nowrap">
+                    <span class="badge bg-light text-dark px-2 py-1">
+                      {{ user.id }}
+                    </span>
+                </td>
+                <td class="text-nowrap">
+                  <div class="d-flex align-items-center">
+                    <div
+                      class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center me-2">
+                      <i class="fas fa-user text-white fs-6"></i>
+                    </div>
+                    <span class="fw-medium text-truncate" style="max-width: 150px;">{{ user.name }}</span>
+                  </div>
+                </td>
+                <td class="text-nowrap text-truncate" style="max-width: 200px;">
+                  <span class="text-muted">{{ user.email }}</span>
+                </td>
+                <td class="text-nowrap">
+                  <span class="text-muted">{{ user.phone }}</span>
+                </td>
+                <td class="text-nowrap">
+                    <span class="badge" [class]="user.role === 'A' ? 'bg-success' : 'bg-info'">
+                      {{ getRoleText(user.role) }}
+                    </span>
+                </td>
+                <td class="text-nowrap">
+                    <span class="badge" [class]="user.status === '1' ? 'bg-success' : 'bg-danger'">
+                      {{ getStatusText(user.status) }}
+                    </span>
+                </td>
+                <td class="text-nowrap">
+                  @if (user.status === '1') {
+                    <button class="btn btn-warning mr-2" (click)="editUser(user)" data-bs-toggle="modal" data-bs-target="#modalAddUser">
+                      <i class="fa-solid fa-user-pen"></i>
+                    </button>
+                    @if (user.id !== useridlocal) {
+                      <button class="btn btn-danger" (click)="disableUser(user.id)"><i class="fa-solid fa-trash"></i></button>
+                    }
+                  }
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
+            <!-- No Data Message -->
+            <div *ngIf="users.length === 0" class="text-center py-5">
+              <i class="fas fa-users fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">ไม่พบข้อมูลผู้ใช้งาน</h5>
+              <p class="text-muted">ลองปรับเปลี่ยนเงื่อนไขการค้นหาใหม่</p>
+            </div>
+
+          </div>
+
+          <!-- Pagination -->
+          <div *ngIf="!loading && users.length > 0"
+               class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+            <div class="text-muted mb-2 mb-md-0">
+              แสดง {{ ((currentPage - 1) * pageSize) + 1 }} -
+              {{ Math.min(currentPage * pageSize, totalRecords) }}
+              จาก {{ totalRecords }} รายการ
+            </div>
+
+            <nav aria-label="Page navigation" *ngIf="totalPages > 1">
+              <ul class="pagination pagination-sm mb-0 flex-wrap">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <button class="page-link" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                </li>
+
+                <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
+                  <button class="page-link" (click)="goToPage(page)" [class.bg-primary]="page === currentPage"
+                          [class.text-white]="page === currentPage">
+                    {{ page }}
+                  </button>
+                </li>
+
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                  <button class="page-link" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<app-my-modal modalId="modalAddUser" [title]="modalTitle" [icon]="modalIcon" >
+  <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+    <div class="mt-3">
+      <label>ชื่อ-สกุล *</label>
+      <input [(ngModel)]="formUser.name" name="name" #name="ngModel" class="form-control" required />
+      <small class="text-danger" *ngIf="name.invalid && name.touched">กรุณากรอกชื่อ-สกุล</small>
+    </div>
+
+    <div class="mt-3">
+      <label>Email *</label>
+      <input [(ngModel)]="formUser.email" name="email" #email="ngModel" type="email" class="form-control" required email />
+      <small class="text-danger" *ngIf="email.invalid && email.touched">กรุณากรอก Email ที่ถูกต้อง</small>
+    </div>
+
+    <div class="mt-3" *ngIf="!isEditMode">
+      <label>Password *</label>
+      <input [(ngModel)]="formUser.password" name="password" #password="ngModel" type="password" class="form-control" required minlength="6" />
+      <small class="text-danger" *ngIf="password.invalid && password.touched">Password ต้องมีอย่างน้อย 6 ตัวอักษร</small>
+    </div>
+
+    <div class="mt-3">
+      <label>เบอร์โทร *</label>
+      <input [(ngModel)]="formUser.phone" name="phone" #phone="ngModel" class="form-control" required pattern="[0-9]{10}" />
+      <small class="text-danger" *ngIf="phone.invalid && phone.touched">กรุณากรอกเบอร์โทร 10 หลัก</small>
+    </div>
+    @if(useridlocal !== formUser.id ){
+    <div class="mt-3">
+      <label>บทบาท *</label>
+      <select [(ngModel)]="formUser.role" name="role" #role="ngModel" class="form-control" required>
+        <option value="">เลือกบทบาท</option>
+        <option value="A">ผู้ดูแลระบบ</option>
+        <option value="S">พนักงาน</option>
+      </select>
+      <small class="text-danger" *ngIf="role.invalid && role.touched">กรุณาเลือกบทบาท</small>
+    </div>
+    }
+    <div class="modal-footer mt-3">
+      <!-- แทนที่ปุ่ม submit ด้วย getter -->
+      <button type="submit" class="btn btn-success" [disabled]="userForm.invalid">
+        {{ submitButtonText }}
+      </button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+    </div>
+  </form>
+</app-my-modal>

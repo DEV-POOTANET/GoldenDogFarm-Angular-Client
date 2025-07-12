@@ -1,0 +1,50 @@
+body {
+  background-color: #f8f9fa;
+  margin: 0;
+}
+
+.header {
+  background: url("/dist/img/banner.jpg") no-repeat center center;
+  background-size: cover;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  padding: 200px 20px;
+  text-align: center;
+  color: rgb(59, 59, 59);
+}
+
+.login-card {
+  max-width: 400px;
+  margin: -80px auto 0;
+  background: #fff;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10;
+}
+
+.login-card img {
+  height: 60px;
+  margin-bottom: 15px;
+}
+
+.login-card input {
+  border-radius: 25px;
+  padding: 10px 15px;
+}
+
+.login-card button {
+  border-radius: 25px;
+  background-color: #d4a855;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+}
+
+.login-card label {
+  font-weight: 500;
+  margin-bottom: 5px;
+}

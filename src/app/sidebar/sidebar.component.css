@@ -1,0 +1,8 @@
+.custom-brand {
+  background-color: #ffffff;
+  color: #000000 !important;
+}
+
+.custom-brand .brand-text {
+  font-weight: 500;
+}

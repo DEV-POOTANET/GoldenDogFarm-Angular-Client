@@ -1,0 +1,218 @@
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-light-warning elevation-4">
+  <!-- Brand Logo -->
+
+
+  <div class="brand-link custom-brand" (click)="navigateToHome()">
+    <img src="dist/img/logo/logo2.png" alt="Logo" class="brand-image">
+    <span class="brand-text font-weight-blod">Golden Future</span>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
+        <img src="dist/img/user/user1.jpg" class="img-circle elevation-2" alt="User Image">
+      </div>
+      <div class="info">
+        <h6 class="d-block">{{ name }}</h6>
+      </div>
+    </div>
+
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+
+        <li class="nav-item">
+          <a routerLink="/users" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+            <i class="nav-icon fa-solid fa-gauge-high"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/users" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
+            <i class="nav-icon fa fa-users"></i>
+            <p>จัดการข้อมูลพนักงาน</p>
+          </a>
+        </li>
+
+      </ul>
+      <hr>
+
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+        <li class="nav-header"><b>ระบบจัดการข้อมูลสุนัข</b></li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-shield-dog"></i>
+            <p>จัดการข้อมูลสุนัข</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-shield-dog"></i>
+            <p>จัดการข้อมูลการผสมพันธ์ุ</p>
+          </a>
+        </li>
+
+      </ul>
+      <hr>
+
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+        <li class="nav-header"><b>ระบบจัดการการขายและการจอง</b></li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-user-tie"></i>
+            <p>จัดการข้อมูลลูกค้า</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-file"></i>
+            <p>จัดการข้อมูลการจอง</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-file"></i>
+            <p>จัดการข้อมูลการขาย</p>
+          </a>
+        </li>
+
+      </ul>
+      <hr>
+
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+        <li class="nav-header"><b>ระบบจัดการสุขภาพ</b></li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-syringe"></i>
+            <p>จัดการการฉีดวัคซีน</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-stethoscope"></i>
+            <p>จัดการการตรวจสุขภาพ</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-virus"></i>
+            <p>จัดการข้อมูลการรักษา</p>
+          </a>
+        </li>
+
+      </ul>
+      <hr>
+
+
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+        <li class="nav-header"><b>การตั้งค่าข้อมูลพื้นฐานด้านสุขภาพ</b></li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-user-doctor"></i>
+            <p>จัดการข้อมูลสัตวแพทย์</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-regular fa-hospital"></i>
+            <p>จัดการข้อมูลคลีนิก</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-syringe"></i>
+            <p>จัดการข้อมูลรายการวัคซีน</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-stethoscope"></i>
+            <p>จัดการข้อมูลรายการตรวจ</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-virus"></i>
+            <p>จัดการข้อมูลรายการรักษา</p>
+          </a>
+        </li>
+
+
+      </ul>
+      <hr>
+
+
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+        <li class="nav-header"><b>การตั้งค่าข้อมูลพื้นฐานสุนัข</b></li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolors" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-palette"></i>
+            <p>จัดการข้อมูลสีสุนัข</p>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             class="nav-link">
+            <i class="nav-icon fa-solid fa-crown"></i>
+            <p>จัดการข้อมูลตำแหน่งสุนัข</p>
+          </a>
+        </li>
+
+      </ul>
+
+      <ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" data-widget="treeview" role="menu"
+          data-accordion="false">
+        <li class="nav-item">
+          <a class="nav-link text-danger" (click)="signout()">
+            <i class="nav-icon fas fa-power-off"></i>
+            <p>ออกจากระบบ</p>
+          </a>
+        </li>
+      </ul>
+
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

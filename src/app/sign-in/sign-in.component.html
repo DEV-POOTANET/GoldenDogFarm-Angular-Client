@@ -1,0 +1,28 @@
+<ng-container *ngIf="!token">
+<div class="header">
+    <h1><b>Welcome</b></h1>
+    <h2>ฟาร์มสุนัขโกลเด้น Golden Future Kennel</h2>
+</div>
+
+<div class="login-card">
+    <div class="text-center">
+        <img src="/dist/img/logo/logo1.png" alt="logo" />
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" class="form-control" placeholder="Enter Email" [(ngModel)]="email"/>
+    </div>
+
+    <div class="form-group mt-3">
+        <label for="password">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Enter password" [(ngModel)]="password"/>
+    </div>
+
+    <div class="mt-4">
+        <button class="btn" (click)="signIn()">
+            <i class="fa fa-check me-2"></i> Sign In
+        </button>
+    </div>
+</div>
+</ng-container>
