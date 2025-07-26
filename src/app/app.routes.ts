@@ -3,6 +3,7 @@ import {SignInComponent} from './sign-in/sign-in.component';
 import {UsersComponent} from './users/users.component';
 import {DogColorsComponent} from './dog-colors/dog-colors.component';
 import {DogPositionsComponent} from './dog-positions/dog-positions.component';
+import {ClinicComponent} from './clinic/clinic.component';
 
 export const routes: Routes = [
   {
@@ -20,5 +21,9 @@ export const routes: Routes = [
   {
     path: 'dogpositions',
     component: DogPositionsComponent,
+  },
+  {
+    path: 'clinic',
+    component: ClinicComponent,
   }
 ];

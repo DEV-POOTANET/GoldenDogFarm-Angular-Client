@@ -1,0 +1,135 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-right">
+          <h4 class="mb-0 text-primary fw-bold">
+            <i class="fa-solid fa-hospital me-2"></i>
+            จัดการข้อมูลคลินิก
+          </h4>
+          <button class="btn btn-primary  ms-auto" data-bs-target="#modalClinic" data-bs-toggle="modal"
+                  (click)="resetForm()">
+            <i class="fa fa-plus"></i> เพิ่มข้อมูลคลินิก
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <!-- Loading Spinner -->
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">กำลังโหลด...</span>
+            </div>
+            <p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p>
+          </div>
+
+          <!-- Clinic Table -->
+          <div *ngIf="!loading" class="table-responsive">
+            <table class="table table-hover align-middle table-sm">
+              <thead class="table-light">
+              <tr>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-hashtag me-1"></i>ID
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-home me-1"></i>ชื่อคลินิก
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-address-book me-1"></i>ที่อยู่
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-phone me-1"></i>โทร
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-circle me-1"></i>สถานะ
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-gear me-1"></i>จัดการ
+                </th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr *ngFor="let Clinic of Clinics; let i = index" class="border-bottom"
+                  [class.table-active]="i % 2 === 0">
+                <td class="text-nowrap">
+                    <span class="badge bg-light text-dark px-2 py-1">
+                      {{ Clinic.id }}
+                    </span>
+                </td>
+
+                <td class="text-nowrap">
+                  <span class="fw-medium text-truncate">{{ Clinic.name }}</span>
+                </td>
+
+                <td class="text-nowrap">
+                  <span class="fw-medium text-truncate">{{ Clinic.address }}</span>
+                </td>
+
+                <td class="text-nowrap">
+                  <span class="fw-medium text-truncate">{{ Clinic.phone }}</span>
+                </td>
+
+                <td class="text-nowrap">
+                    <span class="badge" [class]="Clinic.status === '1' ? 'bg-success' : 'bg-danger'">
+                      {{ getStatusText(Clinic.status) }}
+                    </span>
+                </td>
+                <td class="text-nowrap">
+                  <button class="btn btn-warning mr-2" (click)="editClinic(Clinic)" data-bs-toggle="modal"
+                          data-bs-target="#modalClinic">
+                    <i class="fa-solid fa-user-pen"></i>
+                  </button>
+                  <button class="btn btn-danger" (click)="disableClinic(Clinic.id)"><i class="fa-solid fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
+            <!-- No Data Message -->
+            <div *ngIf="Clinics.length === 0" class="text-center py-5">
+              <i class="fas fa-solid fa-hospital fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">ไม่พบข้อมูลคลินิก</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<app-my-modal modalId="modalClinic" [title]="modalTitle" [icon]="modalIcon">
+  <form #Form="ngForm" (ngSubmit)="onSubmit(Form)">
+    <div class="mt-3">
+      <label>ชื่อคลินิก *</label>
+      <input [(ngModel)]="formClinic.name" name="name" #name="ngModel" class="form-control" required/>
+      <small class="text-danger" *ngIf="name.invalid && name.touched">กรุณากรอกชื่อคลินิก</small>
+    </div>
+
+    <div class="mt-3">
+      <label>ที่อยู่คลินิก</label>
+      <input [(ngModel)]="formClinic.address" name="address" class="form-control"/>
+    </div>
+
+    <div class="mt-3">
+      <label>โทร</label>
+      <input [(ngModel)]="formClinic.phone" name="phone" class="form-control"/>
+    </div>
+
+
+    <div class="modal-footer mt-3">
+      <!-- แทนที่ปุ่ม submit ด้วย getter -->
+      <button type="submit" class="btn btn-success" [disabled]="Form.invalid">
+        {{ submitButtonText }}
+      </button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+    </div>
+  </form>
+</app-my-modal>
