@@ -1,0 +1,55 @@
+
+
+/* Card styling */
+.card {
+  border-radius: 0.75rem;
+}
+
+/* Table styling */
+.table th {
+  border-top: none;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.875rem;
+}
+
+.table td {
+  vertical-align: middle;
+  padding: 0.40rem 0.75rem;
+}
+
+/* Pagination styling */
+.page-link {
+  color: #3b82f6;
+  border-color: #e5e7eb;
+}
+
+.page-link:hover {
+  color: #2563eb;
+  background-color: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.page-item.active .page-link {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+/* Loading spinner */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Hover effects */
+.table-hover tbody tr:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+/* Card header */
+.card-header {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+
+
