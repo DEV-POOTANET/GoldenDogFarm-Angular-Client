@@ -1,0 +1,142 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-right">
+          <h4 class="mb-0 text-primary fw-bold">
+            <i class="fa-solid fa-user-doctor me-2"></i>
+            จัดการข้อมูลสัตวแพทย์
+          </h4>
+          <button class="btn btn-primary  ms-auto" data-bs-target="#modalVet" data-bs-toggle="modal"
+                  (click)="resetForm()">
+            <i class="fa fa-plus"></i> เพิ่มข้อมูลสัตวแพทย์
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <!-- Loading Spinner -->
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">กำลังโหลด...</span>
+            </div>
+            <p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p>
+          </div>
+
+          <!-- Vet Table -->
+          <div *ngIf="!loading" class="table-responsive">
+            <table class="table table-hover align-middle table-sm">
+              <thead class="table-light">
+              <tr>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-hashtag me-1"></i>ID
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-user-doctor me-1"></i>ชื่อสัตวแพทย์
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-phone me-1"></i>โทร
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-home me-1"></i>คลินิก
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-circle me-1"></i>สถานะ
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-gear me-1"></i>จัดการ
+                </th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr *ngFor="let Vet of Vets; let i = index" class="border-bottom"
+                  [class.table-active]="i % 2 === 0">
+                <td class="text-nowrap">
+                    <span class="badge bg-light text-dark px-2 py-1">
+                      {{ Vet.id }}
+                    </span>
+                </td>
+
+                <td class="text-nowrap">
+                  <span class="fw-medium text-truncate">{{ Vet.name }}</span>
+                </td>
+
+
+                <td class="text-nowrap">
+                  <span class="fw-medium text-truncate">{{ Vet.phone }}</span>
+                </td>
+
+                <td class="text-nowrap">
+                  <span class="fw-medium text-truncate">{{ Vet.clinic_Name || "ไม่มีสังกัด" }}</span>
+                </td>
+
+
+                <td class="text-nowrap">
+                    <span class="badge" [class]="Vet.status === '1' ? 'bg-success' : 'bg-danger'">
+                      {{ getStatusText(Vet.status) }}
+                    </span>
+                </td>
+                <td class="text-nowrap">
+                  <button class="btn btn-warning mr-2" (click)="editVet(Vet)" data-bs-toggle="modal"
+                          data-bs-target="#modalVet">
+                    <i class="fa-solid fa-user-pen"></i>
+                  </button>
+                  <button class="btn btn-danger" (click)="disableVet(Vet.id)"><i class="fa-solid fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
+            <!-- No Data Message -->
+            <div *ngIf="Vets.length === 0" class="text-center py-5">
+              <i class="fas fa-solid fa-user-doctor fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">ไม่พบข้อมูลสัตวแพทย์</h5>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<app-my-modal modalId="modalVet" [title]="modalTitle" [icon]="modalIcon">
+  <form #Form="ngForm" (ngSubmit)="onSubmit(Form)">
+    <div class="mt-3">
+      <label>ชื่อสัตวแพทย์ *</label>
+      <input [(ngModel)]="formVet.name" name="name" #name="ngModel" class="form-control" required/>
+      <small class="text-danger" *ngIf="name.invalid && name.touched">กรุณากรอกชื่อสัตวแพทย์</small>
+    </div>
+
+    <div class="mt-3">
+      <label>โทร</label>
+      <input [(ngModel)]="formVet.phone" name="phone" class="form-control" #phone="ngModel" pattern="[0-9]{10}"/>
+      <small class="text-danger" *ngIf="phone.invalid && phone.touched">กรุณากรอกเบอร์โทร 10 หลัก</small>
+    </div>
+
+    <div class="form-group mt-3">
+      <label for="clinicId">เลือกคลินิก</label>
+      <select id="clinicId" class="form-control" name="clinicId" [(ngModel)]="formVet.clinicId" >
+        <option [ngValue]="null">-- ไม่มีสังกัด --</option>
+        <option *ngFor="let clinic of Clinics" [ngValue]="clinic.id">
+          {{ clinic.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="modal-footer mt-3">
+      <!-- แทนที่ปุ่ม submit ด้วย getter -->
+      <button type="submit" class="btn btn-success" [disabled]="Form.invalid">
+        {{ submitButtonText }}
+      </button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+    </div>
+  </form>
+</app-my-modal>
