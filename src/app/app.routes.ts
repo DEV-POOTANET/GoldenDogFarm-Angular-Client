@@ -5,6 +5,7 @@ import {DogColorsComponent} from './dog-colors/dog-colors.component';
 import {DogPositionsComponent} from './dog-positions/dog-positions.component';
 import {ClinicComponent} from './clinic/clinic.component';
 import {VetComponent} from './vet/vet.component';
+import {TreatmentListComponent} from './treatment-list/treatment-list.component';
 
 export const routes: Routes = [
   {
@@ -30,5 +31,9 @@ export const routes: Routes = [
   {
     path: 'vet',
     component: VetComponent,
+  },
+  {
+    path: 'treatmen-tlist',
+    component: TreatmentListComponent,
   }
 ];
