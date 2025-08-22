@@ -7,6 +7,7 @@ import {ClinicComponent} from './clinic/clinic.component';
 import {VetComponent} from './vet/vet.component';
 import {TreatmentListComponent} from './treatment-list/treatment-list.component';
 import {CustomersComponent} from './customers/customers.component';
+import {VaccineListComponent} from './vaccine-list/vaccine-list.component';
 export const routes: Routes = [
   {
     path: '',
@@ -33,10 +34,13 @@ export const routes: Routes = [
     component: VetComponent,
   },
   {
-    path: 'treatmen-tlist',
+    path: 'treatment-list',
     component: TreatmentListComponent,
-  }
-  ,
+  },
+  {
+    path: 'vaccine-list',
+    component: VaccineListComponent,
+  },
   {
     path: 'customers',
     component: CustomersComponent,
