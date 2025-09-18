@@ -78,14 +78,7 @@ export class SignInComponent {
             localStorage.setItem('name', decoded.username);
             localStorage.setItem('role', decoded.role);
 
-            Swal.fire({
-              toast: true,
-              position: 'top-end',
-              icon: 'success',
-              title: 'เข้าสู่ระบบสำเร็จ',
-              showConfirmButton: false,
-              timer: 500
-            }).then(() => location.reload());
+            location.reload();
           },
           (err: any) => {
             Swal.fire({

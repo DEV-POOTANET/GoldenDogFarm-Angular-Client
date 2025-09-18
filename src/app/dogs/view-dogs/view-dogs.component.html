@@ -1,0 +1,267 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-right">
+          <h4 class="mb-0 text-primary fw-bold">
+            <i class="fas fa-dog me-2"></i>
+            จัดการข้อมูลสุนัข
+          </h4>
+          <button routerLink="/add-dogs" class="btn btn-primary  ms-auto">
+            <i class="fa fa-plus"></i> เพิ่มข้อมูลสุนัข
+          </button>
+
+
+        </div>
+
+        <div class="card-body">
+          <!-- Search and Filter Section -->
+          <div class="row mb-4 gx-2 gy-3 flex-wrap">
+            <div class="col-12 col-md-2 col-lg-2">
+              <label class="fw-semibold">ค้นหาตามชื่อ</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-search text-muted"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control border-start-0 ps-0"
+                  placeholder="กรอกชื่อสุนัข..."
+                  [(ngModel)]="searchName"
+                  (keyup.enter)="searchDogs()"
+                >
+              </div>
+            </div>
+
+            <div class="col-12 col-md-2 col-lg-2">
+              <label class="fw-semibold">สถานะ</label>
+              <select class="form-select" [(ngModel)]="filterStatus" (change)="searchDogs()">
+                <option value="">ทั้งหมด</option>
+                <option value="1">พ่อพันธุ์</option>
+                <option value="2">พ่อพันธุ์นอกฟาร์ม</option>
+                <option value="3">แม่พันธุ์</option>
+                <option value="4">ประกวด</option>
+                <option value="5">ลูกสุนัข</option>
+                <option value="6">เสียชีวิต</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-2 col-lg-2">
+              <label class="fw-semibold">สถานะผสมพันธุ์</label>
+              <select class="form-select" [(ngModel)]="filterStatusBreeding" (change)="searchDogs()">
+                <option value="">ทั้งหมด</option>
+                <option value="1">พร้อมผสม</option>
+                <option value="2">ไม่พร้อมผสม</option>
+                <option value="3">รอผลการผสม</option>
+                <option value="4">ท้อง</option>
+                <option value="5">พักฟื้น</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-2 col-lg-2">
+              <label class="fw-semibold">สถานะการขาย</label>
+              <select class="form-select" [(ngModel)]="filterStatusSale" (change)="searchDogs()">
+                <option value="">ทั้งหมด</option>
+                <option value="1">พร้อมขาย</option>
+                <option value="2">ไม่ขาย</option>
+                <option value="3">จอง</option>
+                <option value="4">จำหน่ายแล้ว</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-2 col-lg-2">
+              <label class="fw-semibold">เพศ</label>
+              <select class="form-select" [(ngModel)]="filterGender" (change)="searchDogs()">
+                <option value="">ทั้งหมด</option>
+                <option value="M">ตัวผู้</option>
+                <option value="F">ตัวเมีย</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-2 col-lg-1">
+              <label class="fw-semibold">จำนวนต่อหน้า</label>
+              <select class="form-select" [(ngModel)]="pageSize" (change)="changePageSize()">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-1 col-lg-1 d-flex align-items-end">
+              <button class="btn btn-primary w-100 mt-3 mt-lg-0" (click)="searchDogs()" [disabled]="loading">
+                <i class="fas fa-search me-2"></i>
+                ค้นหา
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <!-- Loading Spinner -->
+          <div *ngIf="loading" class="text-center py-5 ">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">กำลังโหลด...</span>
+            </div>
+            <p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p>
+          </div>
+
+          <!-- Dogs Table -->
+          <div *ngIf="!loading" class="table-responsive mt-3">
+            <table class="table table-hover align-middle table-sm">
+              <thead class="table-light">
+              <tr>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-hashtag me-1"></i>ID
+                </th>
+
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-dog me-1"></i>ชื่อ
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-signature me-1"></i>ชื่อเรียก
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-venus-mars me-1"></i>เพศ
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-circle me-1"></i>สถานะ
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-paw me-1"></i>สถานะผสมพันธุ์
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-shopping-cart me-1"></i>สถานะการขาย
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-gear me-1"></i>จัดการ
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let dog of dogs; let i = index" class="border-bottom" [class.table-active]="i % 2 === 0">
+                <td class="text-nowrap">
+                  <span class="badge bg-light text-dark px-2 py-1">{{ dog.id }}</span>
+                </td>
+                <td class="text-nowrap">
+                  <div class="d-flex align-items-center">
+                    <!-- Avatar -->
+                    <div
+                      class="avatar-sm bg-primary d-flex align-items-center justify-content-center me-2 rounded-circle overflow-hidden">
+                      <img [src]="dog.profileImage"
+                           alt="Profile"
+                           style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+
+                    <!-- Name -->
+                    <span class="fw-medium text-truncate" style="max-width: 200px;">
+                      {{ dog.name }}
+                    </span>
+                  </div>
+                </td>
+
+                <td class="text-nowrap text-truncate" style="max-width: 200px;">
+                  <span class="text-muted">{{ dog.callName || "-" }}</span>
+                </td>
+                <td class="text-nowrap">
+          <span class="badge"
+                [class]="dog.gender === 'M' ? 'bg-primary' : 'bg-danger'">{{ getGenderText(dog.gender) }}</span>
+                </td>
+                <td class="text-nowrap">
+                    <span class="badge" [class]="dog.status === '1' ? 'bg-primary'
+                    : dog.status === '2' ? 'bg-secondary'
+                    : dog.status === '3' ? 'bg-success'
+                    : dog.status === '4' ? 'bg-warning'
+                    : dog.status === '5' ? 'bg-info': 'bg-danger'">
+                      {{ getStatusText(dog.status) }}
+                    </span>
+                </td>
+                <td class="text-nowrap">
+                    <span class="badge" [class]="dog.statusBreeding === '1' ? 'bg-success'
+                    : dog.statusBreeding === '2' ? 'bg-danger'
+                    : dog.statusBreeding === '3' ? 'bg-warning'
+                    : dog.statusBreeding === '4' ? 'bg-info'
+                    : dog.statusBreeding === '5' ? 'bg-primary':'bg-danger'">
+                      {{ getBreedingStatusText(dog.statusBreeding) }}
+                    </span>
+                </td>
+                <td class="text-nowrap">
+                    <span class="badge" [class]="dog.statusSale === '1' ? 'bg-success'
+                    : dog.statusSale === '2' ? 'bg-warning'
+                    : dog.statusSale === '3' ? 'bg-info'
+                    : dog.statusSale === '4' ? 'bg-danger':'bg-danger'">
+                      {{ getSaleStatusText(dog.statusSale) }}
+                    </span>
+                </td>
+
+                <td class="text-nowrap">
+                  <button class="btn btn-primary mr-2" [routerLink]="['/view-dogdtl', dog.id]">
+                    <i class="fa-solid fa-eye"></i>
+                  </button>
+
+                  <button class="btn btn-warning mr-2 " [routerLink]="['/edit-dog', dog.id]">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </button>
+                  <button class="btn btn-danger mr-2 " (click)="disableDog(dog.id)">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                  <button class="btn btn-success" [routerLink]="['/manage-position', dog.id]">
+                    <i class="fa-solid fa-crown "></i>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
+            <!-- No Data Message -->
+            <div *ngIf="dogs.length === 0" class="text-center py-5">
+              <i class="fas fa-dog fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">ไม่พบข้อมูลสุนัข</h5>
+              <p class="text-muted">ลองปรับเปลี่ยนเงื่อนไขการค้นหาใหม่</p>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div *ngIf="!loading && dogs.length > 0"
+               class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+            <div class="text-muted mb-2 mb-md-0">
+              แสดง {{ ((currentPage - 1) * pageSize) + 1 }} - {{ Math.min(currentPage * pageSize, totalRecords) }}
+              จาก {{ totalRecords }} รายการ
+            </div>
+            <nav aria-label="Page navigation" *ngIf="totalPages > 1">
+              <ul class="pagination pagination-sm mb-0 flex-wrap">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <button class="page-link" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                </li>
+                <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
+                  <button
+                    class="page-link"
+                    (click)="goToPage(page)"
+                    [class.bg-primary]="page === currentPage"
+                    [class.text-white]="page === currentPage"
+                  >
+                    {{ page }}
+                  </button>
+                </li>
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                  <button class="page-link" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

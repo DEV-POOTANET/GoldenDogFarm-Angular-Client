@@ -9,6 +9,11 @@ import {TreatmentListComponent} from './treatment-list/treatment-list.component'
 import {CustomersComponent} from './customers/customers.component';
 import {VaccineListComponent} from './vaccine-list/vaccine-list.component';
 import {HealthCheckListComponent} from './health-check-list/health-check-list.component';
+import {AddDogsComponent} from './dogs/add-dogs/add-dogs.component';
+import {ViewDogsComponent} from './dogs/view-dogs/view-dogs.component';
+import {ManagePositionComponent} from './dogs/manage-position/manage-position.component';
+import {EditDogComponent} from './dogs/edit-dog/edit-dog.component';
+import {ViewDogdtlComponent} from './dogs/view-dogdtl/view-dogdtl.component';
 export const routes: Routes = [
   {
     path: '',
@@ -49,5 +54,25 @@ export const routes: Routes = [
   {
     path: 'customers',
     component: CustomersComponent,
+  },
+  {
+    path: 'add-dogs',
+    component: AddDogsComponent,
+  },
+  {
+    path: 'view-dogs',
+    component: ViewDogsComponent,
+  },
+  {
+    path: 'manage-position/:id',
+    component: ManagePositionComponent,
+  },
+  {
+    path: 'edit-dog/:id',
+    component: EditDogComponent,
+  },
+  {
+    path: 'view-dogdtl/:id',
+    component: ViewDogdtlComponent,
   }
 ];
