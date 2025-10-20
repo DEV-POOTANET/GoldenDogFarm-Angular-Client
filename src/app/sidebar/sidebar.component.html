@@ -12,12 +12,14 @@
   <div class="sidebar">
     <!-- Sidebar user panel (optional) -->
     <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-      <div class="image">
+      <div class="image mt-2">
         <img src="dist/img/user/user1.jpg" class="img-circle elevation-2" alt="User Image">
       </div>
       <div class="info">
         <h6 class="d-block">{{ name }}</h6>
+        <h6 class="d-block">ระดับ: {{ getRoleText(role) }}</h6>
       </div>
+
     </div>
 
 
@@ -103,7 +105,7 @@
         <li class="nav-header"><b>ระบบจัดการสุขภาพ</b></li>
 
         <li class="nav-item">
-          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+          <a routerLink="/vaccinations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
              class="nav-link">
             <i class="nav-icon fa-solid fa-syringe"></i>
             <p>จัดการการฉีดวัคซีน</p>
@@ -200,6 +202,7 @@
         </li>
 
       </ul>
+      <hr>
 
       <ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" data-widget="treeview" role="menu"
           data-accordion="false">

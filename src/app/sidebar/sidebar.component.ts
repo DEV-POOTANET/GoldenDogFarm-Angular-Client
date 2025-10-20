@@ -13,10 +13,23 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class SidebarComponent {
   constructor(private http: HttpClient, private router: Router) { }
   name: string = '';
-
+  role: string = '';
   ngOnInit() {
     this.name = localStorage.getItem('name')!;
+    this.role = localStorage.getItem('role')!;
+
   }
+  getRoleText(role: string): string {
+    switch (role) {
+      case 'A':
+        return 'Admin';
+      case 'S':
+        return 'Staff';
+      default:
+        return role;
+    }
+  }
+
   async signout() {
     const button = await Swal.fire({
       title: 'ออกจากระบบ',

@@ -14,6 +14,8 @@ import {ViewDogsComponent} from './dogs/view-dogs/view-dogs.component';
 import {ManagePositionComponent} from './dogs/manage-position/manage-position.component';
 import {EditDogComponent} from './dogs/edit-dog/edit-dog.component';
 import {ViewDogdtlComponent} from './dogs/view-dogdtl/view-dogdtl.component';
+import {VaccinationsComponent} from './vaccinations/vaccinations.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -74,5 +76,9 @@ export const routes: Routes = [
   {
     path: 'view-dogdtl/:id',
     component: ViewDogdtlComponent,
+  },
+  {
+    path: 'vaccinations',
+    component: VaccinationsComponent,
   }
 ];

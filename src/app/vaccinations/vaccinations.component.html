@@ -1,0 +1,387 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-right">
+          <h4 class="mb-0 text-primary fw-bold">
+            <i class="fas fa-syringe me-2"></i>
+            จัดการการฉีดวัคซีน
+          </h4>
+          <button class="btn btn-primary ms-auto" data-bs-target="#modalAddVaccination" data-bs-toggle="modal"
+                  (click)="resetForm()">
+            <i class="fa fa-plus"></i> เพิ่มข้อมูลการฉีดวัคซีน
+          </button>
+        </div>
+
+        <div class="card-body">
+          <!-- Search and Filter Section -->
+          <div class="row mb-4 gx-2 gy-3 flex-wrap">
+            <div class="col-12 col-md-4 col-lg-3">
+              <label class="fw-semibold">ค้นหาตามชื่อสุนัข</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-search text-muted"></i>
+                </span>
+                <input type="text" class="form-control border-start-0 ps-0" placeholder="กรอกชื่อสุนัข..."
+                       [(ngModel)]="searchDogName" (keyup.enter)="searchVaccinations()">
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4 col-lg-3">
+              <label class="fw-semibold">ค้นหาตามสถานะ</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-search text-muted"></i>
+                </span>
+                <select class="form-control border-start-0 ps-0" [(ngModel)]="searchStatus">
+                  <option value="">ทั้งหมด</option>
+                  <option value="1">อยู่ระหว่างการนัด</option>
+                  <option value="2">สำเร็จ</option>
+                  <option value="3">ยกเลิก</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-4 col-lg-3">
+              <label class="fw-semibold">จำนวนต่อหน้า</label>
+              <select class="form-select" [(ngModel)]="pageSize" (change)="changePageSize()">
+                <option [value]="5">5</option>
+                <option [value]="10">10</option>
+                <option [value]="20">20</option>
+                <option [value]="50">50</option>
+              </select>
+            </div>
+
+            <div class="col-12 col-md-12 col-lg-3 d-flex align-items-end">
+              <button class="btn btn-primary w-100 mt-3 mt-lg-0" (click)="searchVaccinations()" [disabled]="loading">
+                <i class="fas fa-search me-2"></i>
+                ค้นหา
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <!-- Loading Spinner -->
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">กำลังโหลด...</span>
+            </div>
+            <p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p>
+          </div>
+
+          <!-- Vaccination Table -->
+          <div *ngIf="!loading" class="table-responsive">
+            <table class="table table-hover align-middle table-sm">
+              <thead class="table-light">
+              <tr>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-list me-1"></i>โดส
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-hashtag me-1"></i>ID
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-syringe me-1"></i>วัคซีน
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-dog me-1"></i>สุนัข
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-user me-1"></i>ผู้ใช้
+                </th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-circle me-1"></i>สถานะ
+                </th>
+
+                <th scope="col" class="fw-semibold text-dark text-nowrap">
+                  <i class="fas fa-gear me-1"></i>จัดการ
+                </th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <ng-container *ngFor="let vaccination of vaccinations; let i = index">
+                <!-- แถวหลัก -->
+                <tr class="border-bottom" [class.table-active]="i % 2 === 0">
+                  <!-- ปุ่มดูโดส -->
+                  <td class="text-nowrap">
+                    <button class="btn btn-sm"
+                            [ngClass]="getDoseButtonClass(getActiveDose(vaccination) ?? null)"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            [attr.data-bs-target]="'#doseDetails' + vaccination.vR_ID"
+                            aria-expanded="false"
+                            [attr.aria-controls]="'doseDetails' + vaccination.vR_ID"
+                            style="max-width: 30px;">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </td>
+
+
+
+                  <td class="text-nowrap">
+                    <span class="badge bg-light text-dark px-2 py-1">{{ vaccination.vR_ID }}</span>
+                  </td>
+                  <td class="text-nowrap">
+                    <div class="d-flex align-items-center">
+                      <div
+                        class="avatar-sm bg-primary rounded-circle d-flex align-items-center justify-content-center me-2">
+                        <i class="fas fa-syringe text-white fs-6"></i>
+                      </div>
+                      <span class="fw-medium text-truncate"
+                            style="max-width: 200px;">{{ vaccination.vaccine_Name }}</span>
+                    </div>
+                  </td>
+                  <td class="text-nowrap text-truncate" style="max-width: 150px;">
+                    <span class="text-muted">{{ vaccination.dog_Name }}</span>
+                  </td>
+                  <td class="text-nowrap text-truncate" style="max-width: 150px;">
+                    <span class="text-muted">{{ vaccination.user_Name }}</span>
+                  </td>
+                  <td class="text-nowrap">
+                    <span class="badge"
+                          [class]="vaccination.vR_Status === '1' ? 'bg-warning' :
+                                    vaccination.vR_Status === '2' ? 'bg-success' : 'bg-danger'">
+                      {{ getStatusText(vaccination.vR_Status) }}
+                    </span>
+                  </td>
+
+
+                  <td class="text-nowrap">
+                    <button class="btn btn-warning mr-2"
+                            (click)="editVaccination(vaccination)"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalAddVaccination">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button class="btn btn-danger"
+                            (click)="disableVaccination(vaccination.vR_ID)">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- แถวโดส (ขยายได้) -->
+                <tr class="collapse bg-light" [id]="'doseDetails' + vaccination.vR_ID">
+                  <td colspan="7" class="p-3">
+                    <div *ngIf="vaccination.doses.length > 0; else noDose">
+                      <h6 class="fw-bold text-primary mb-3">
+                        <i class="fa fa-syringe me-2"></i>รายละเอียดโดสของวัคซีน {{ vaccination.vaccine_Name }}
+                      </h6>
+
+                      <table class="table table-bordered table-sm mb-0">
+                        <thead class="table-warning">
+                        <tr>
+                          <th>ลำดับ</th>
+                          <th>สัตว์แพทย์  </th>
+                          <th>วันที่นัด</th>
+                          <th>วันที่ฉีด</th>
+                          <th>หมายเหตุ</th>
+                          <th>สถานะ</th>
+                          <th>จัดการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let dose of vaccination.doses; let j = index">
+                          <td>{{ dose.dS_Number || '-'}}</td>
+                          <td>{{ dose.vet_Name || '-'}}</td>
+                          <td>{{ dose.dS_ScheduledDate | date:'dd/MM/yyyy' }}</td>
+                          <td>{{ dose.dS_ActualDate | date:'dd/MM/yyyy' }}</td>
+                          <td>{{ dose.dS_Notes || '-' }}</td>
+                          <td>
+                            <span class="badge"
+                                  [class]="dose.dS_Status === '1' ? 'bg-warning' :
+                                    dose.dS_Status === '2' ? 'bg-success' : 'bg-danger'">
+                            {{ getDoseStatusText(dose.dS_Status) }}
+                            </span>
+                          </td>
+                          <td class="text-nowrap">
+                            <button class="btn btn-warning mr-2"
+                                    (click)="editDose(dose)"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalAddDose">
+                              <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button class="btn btn-danger"
+                                    (click)="disableDose(dose.dS_ID)">
+                              <i class="fa-solid fa-trash"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                      <button class="btn btn-primary btn-sm mt-2" data-bs-toggle="modal"
+                              data-bs-target="#modalAddDose"
+                              (click)="openAddDoseModal(vaccination.vR_ID)">
+                        <i class="fa fa-plus"></i> เพิ่มโดสการฉีด
+                      </button>
+                    </div>
+
+                    <ng-template #noDose>
+                      <div class="text-muted fst-italic">ไม่มีข้อมูลโดสในรายการนี้</div>
+                      <button class="btn btn-primary btn-sm mt-2" data-bs-toggle="modal"
+                              data-bs-target="#modalAddDose"
+                              (click)="openAddDoseModal(vaccination.vR_ID)">
+                        <i class="fa fa-plus"></i> เพิ่มโดสการฉีด
+                      </button>
+                    </ng-template>
+                  </td>
+                </tr>
+              </ng-container>
+              </tbody>
+
+            </table>
+
+            <!-- No Data Message -->
+            <div *ngIf="vaccinations.length === 0" class="text-center py-5">
+              <i class="fas fa-syringe fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">ไม่พบข้อมูลการฉีดวัคซีน</h5>
+              <p class="text-muted">ลองปรับเปลี่ยนเงื่อนไขการค้นหาใหม่</p>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div *ngIf="!loading && vaccinations.length > 0"
+               class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+            <div class="text-muted mb-2 mb-md-0">
+              แสดง {{ ((currentPage - 1) * pageSize) + 1 }} -
+              {{ Math.min(currentPage * pageSize, totalRecords) }}
+              จาก {{ totalRecords }} รายการ
+            </div>
+
+            <nav aria-label="Page navigation" *ngIf="totalPages > 1">
+              <ul class="pagination pagination-sm mb-0 flex-wrap">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <button class="page-link" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                </li>
+
+                <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="page === currentPage">
+                  <button class="page-link" (click)="goToPage(page)" [class.bg-primary]="page === currentPage"
+                          [class.text-white]="page === currentPage">
+                    {{ page }}
+                  </button>
+                </li>
+
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                  <button class="page-link" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-my-modal modalId="modalAddVaccination" [title]="modalTitle" [icon]="modalIcon" [modalSize]="'modal-xl'">
+  <form #vaccinationForm="ngForm" (ngSubmit)="onSubmit(vaccinationForm)">
+    <div class="mt-3">
+      <label>วัคซีน *</label>
+      <select [(ngModel)]="formVaccination.vaccine_ID" name="vaccine_ID" #vaccine="ngModel" class="form-control"
+              required>
+        <option value="">เลือกวัคซีน</option>
+        <option *ngFor="let vaccine of vaccines" [value]="vaccine.id">{{ vaccine.name }}</option>
+      </select>
+      <small class="text-danger" *ngIf="vaccine.invalid && vaccine.touched">กรุณาเลือกวัคซีน</small>
+    </div>
+
+    <div class="mt-3">
+      <label>สุนัข *</label>
+      <select [(ngModel)]="formVaccination.dog_ID" name="dog_ID" #dog="ngModel" class="form-control" required>
+        <option value="">เลือกสุนัข</option>
+        <option *ngFor="let dog of dogs" [value]="dog.id">{{ dog.name }}</option>
+      </select>
+      <small class="text-danger" *ngIf="dog.invalid && dog.touched">กรุณาเลือกสุนัข</small>
+    </div>
+
+    <div class="mt-3">
+      <label>ผู้ใช้ *</label>
+      <select [(ngModel)]="formVaccination.user_ID" name="user_ID" #user="ngModel" class="form-control" required>
+        <option value="">เลือกผู้ใช้</option>
+        <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+      </select>
+      <small class="text-danger" *ngIf="user.invalid && user.touched">กรุณาเลือกผู้ใช้</small>
+    </div>
+
+    <div class="mt-3">
+      <label>สถานะ *</label>
+      <select [(ngModel)]="formVaccination.vR_Status" name="vR_Status" class="form-control" required>
+        <option value="1">อยู่ระหว่างการนัด</option>
+        <option value="2">สำเร็จ</option>
+        <option value="3">ยกเลิก</option>
+      </select>
+    </div>
+
+
+    <div class="modal-footer mt-3">
+      <button type="submit" class="btn btn-success" [disabled]="vaccinationForm.invalid">
+        {{ submitButtonText }}
+      </button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+    </div>
+  </form>
+</app-my-modal>
+
+
+<app-my-modal modalId="modalAddDose" [title]="doseModalTitle" [icon]="doseModalIcon" [modalSize]="'modal-xl'">
+  <form #doseForm="ngForm" (ngSubmit)="onSubmitDose(doseForm)">
+    <div class="mt-3">
+      <label>สัตว์แพทย์ *</label>
+      <select [(ngModel)]="newDose.vet_ID" name="vet_ID" #vet="ngModel" class="form-control" required>
+        <option value="0">เลือกสัตว์แพทย์</option>
+        <option *ngFor="let vet of vets" [value]="vet.id">{{ vet.name }}</option>
+      </select>
+      <small class="text-danger" *ngIf="vet.invalid && vet.touched">กรุณาเลือกสัตว์แพทย์</small>
+    </div>
+
+    <div class="mt-3">
+      <label>ลำดับโดส *</label>
+      <input type="number" [(ngModel)]="newDose.dS_Number" name="dS_Number" #dsNumber="ngModel" class="form-control" required min="1">
+      <small class="text-danger" *ngIf="dsNumber.invalid && dsNumber.touched">กรุณากรอกลำดับโดส</small>
+    </div>
+
+    <div class="mt-3">
+      <label>วันที่นัดหมาย *</label>
+      <input type="date" [(ngModel)]="newDose.dS_ScheduledDate" name="dS_ScheduledDate" #dsScheduled="ngModel" class="form-control" required>
+      <small class="text-danger" *ngIf="dsScheduled.invalid && dsScheduled.touched">กรุณาเลือกวันที่นัดหมาย</small>
+    </div>
+
+    <div class="mt-3">
+      <label>วันที่ฉีดจริง</label>
+      <input type="date" [(ngModel)]="newDose.dS_ActualDate" name="dS_ActualDate" class="form-control">
+    </div>
+
+    <div class="mt-3">
+      <label>หมายเหตุ</label>
+      <textarea [(ngModel)]="newDose.dS_Notes" name="dS_Notes" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="mt-3">
+      <label>สถานะ *</label>
+      <select [(ngModel)]="newDose.dS_Status" name="dS_Status" class="form-control" required>
+        <option value="1">นัดหมาย</option>
+        <option value="2">สำเร็จ</option>
+        <option value="3">ยกเลิก</option>
+      </select>
+    </div>
+
+    <div class="modal-footer mt-3">
+      <button type="submit" class="btn btn-success" [disabled]="doseForm.invalid">
+        {{ doseSubmitButtonText }}
+      </button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+    </div>
+  </form>
+</app-my-modal>
