@@ -1,1 +1,214 @@
-<p>edit-dog works!</p>
+<div class="container-fluid py-4">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white">
+      <h4 class="mb-0 text-primary">
+        <i class="fa-solid fa-dog me-2"></i> แก้ไขข้อมูลสุนัข
+      </h4>
+    </div>
+    <div class="card-body">
+      <form #dogForm="ngForm" (ngSubmit)="onSubmit(dogForm)">
+        <div class="row g-3">
+          <div class="row mt-3">
+            <div class="col-md-4 mb-3">
+              <label>ชื่อสุนัข *</label>
+              <input class="form-control" [(ngModel)]="formDog.dog_Name" name="dog_Name" required />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>ชื่อเรียก</label>
+              <input class="form-control" [(ngModel)]="formDog.dog_CallName" name="dog_CallName" />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>เพศ *</label>
+              <select class="form-select" [(ngModel)]="formDog.dog_Gender" name="dog_Gender" required>
+                <option value="">-- เลือกเพศ --</option>
+                <option value="M">ผู้</option>
+                <option value="F">เมีย</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>สี *</label>
+              <select [(ngModel)]="formDog.color_ID" name="color_ID" class="form-select" required>
+                <option value="">-- เลือกสี --</option>
+                <option *ngFor="let color of colors" [value]="color.id">{{color.name}}</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>หมายเลขไมโครชิป</label>
+              <input class="form-control" [(ngModel)]="formDog.dog_Microchip" name="dog_Microchip" />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>เลขจดทะเบียน</label>
+              <input class="form-control" [(ngModel)]="formDog.dog_RegNo" name="dog_RegNo" />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>วันเกิด</label>
+              <input class="form-control" type="date" [(ngModel)]="formDog.dog_Birthday" name="dog_Birthday" />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>ราคา *</label>
+              <input class="form-control" type="number" [(ngModel)]="formDog.dog_Price" name="dog_Price" required />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>URL K9data</label>
+              <input class="form-control" [(ngModel)]="formDog.dog_K9Url" name="dog_K9Url" />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>ชื่อเจ้าของสุนัข</label>
+              <input class="form-control" [(ngModel)]="formDog.dog_Owner" name="dog_Owner" />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>ชื่อผู้เพาะพันธุ์</label>
+              <input class="form-control" [(ngModel)]="formDog.dog_Breeder" name="dog_Breeder" />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>ครอก</label>
+              <select [(ngModel)]="formDog.breeding_ID" name="breeding_ID" class="form-select">
+                <option value="">-- เลือกครอก --</option>
+                <option *ngFor="let breeding of Breeding" [value]="breeding.id">ID {{breeding.id}} => {{breeding.notes}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <div class="col-md-4 mb-3">
+              <label>สถานะสุนัข *</label>
+              <select [(ngModel)]="formDog.dog_Status" name="dog_Status" class="form-select" required>
+                <option value="1">พ่อพันธุ์</option>
+                <option value="2">พ่อพันธุ์นอกฟาร์ม</option>
+                <option value="3">แม่พันธุ์</option>
+                <option value="4">ประกวด</option>
+                <option value="5">ลูกสุนัข</option>
+                <option value="6">เสียชีวิต</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>สถานะการผสม *</label>
+              <select [(ngModel)]="formDog.dog_StatusBreeding" name="dog_StatusBreeding" class="form-select" required>
+                <option value="1">พร้อมผสม</option>
+                <option value="2">ไม่พร้อมผสม</option>
+                <option value="3">รอผลการผสม</option>
+                <option value="4">ท้อง</option>
+                <option value="5">พักฟื้น</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>สถานะการขาย *</label>
+              <select [(ngModel)]="formDog.dog_StatusSale" name="dog_StatusSale" class="form-select" required>
+                <option value="1">พร้อมขาย</option>
+                <option value="2">ไม่ขาย</option>
+                <option value="3">จอง</option>
+                <option value="4">จำหน่ายแล้ว</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>พ่อพันธุ์</label>
+              <select [(ngModel)]="formDog.dog_Dad" name="dog_Dad" class="form-select">
+                <option value="">-- พ่อพันธุ์ --</option>
+                <option *ngFor="let dogDad of DogDad" [value]="dogDad.id">ID {{dogDad.id}} => {{dogDad.name}}</option>
+              </select>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label>แม่พันธุ์</label>
+              <select [(ngModel)]="formDog.dog_Mom" name="dog_Mom" class="form-select">
+                <option value="">-- แม่พันธุ์ --</option>
+                <option *ngFor="let dogMom of DogMom" [value]="dogMom.id">ID {{dogMom.id}} => {{dogMom.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <hr class="mt-5">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-file-earmark-pdf me-1"></i> Pedigree (PDF)
+            </label>
+            <input class="form-control" type="file" (change)="onFileChange($event,'pedigree')" accept="application/pdf" />
+            <div *ngIf="existingPedigree && !deletePedigree" class="mt-2 d-flex align-items-center gap-2">
+              <i class="bi bi-file-earmark-check-fill text-danger fs-5"></i>
+              <span>{{ existingPedigree.split('/').pop() }}</span>
+              <button type="button" class="btn btn-sm btn-outline-danger ms-auto" (click)="toggleDelete('pedigree')">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+            <div *ngIf="pedigreeFile" class="mt-2 d-flex align-items-center gap-2">
+              <span>ใหม่: {{ pedigreeFile.name }}</span>
+              <button type="button" class="btn btn-sm btn-outline-danger ms-auto" (click)="removeFile('pedigree')">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-image me-1"></i> Pedigree Image
+            </label>
+            <input class="form-control" type="file" (change)="onFileChange($event,'pedigreeImg')" accept="image/*" />
+            <div *ngIf="existingPedigreeImg && !deletePedigreeImg" class="mt-2 position-relative d-inline-block">
+              <img [src]="existingPedigreeImg" class="img-thumbnail rounded shadow-sm" width="150" />
+              <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle" (click)="toggleDelete('pedigreeImg')">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+            <div *ngIf="pedigreeImgFilePreview" class="mt-2 position-relative d-inline-block">
+              <img [src]="pedigreeImgFilePreview" class="img-thumbnail rounded shadow-sm" width="150" />
+              <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle" (click)="removeFile('pedigreeImg')">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-person-circle me-1"></i> Profile Image
+            </label>
+            <input class="form-control" type="file" (change)="onFileChange($event,'profile')" accept="image/*" />
+            <div *ngIf="existingProfile && !deleteProfile" class="mt-2 position-relative d-inline-block">
+              <img [src]="existingProfile" class="img-thumbnail rounded shadow-sm" width="150" />
+              <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle" (click)="toggleDelete('profile')">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+            <div *ngIf="profileFilePreview" class="mt-2 position-relative d-inline-block">
+              <img [src]="profileFilePreview" class="img-thumbnail rounded shadow-sm" width="150" />
+              <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle" (click)="removeFile('profile')">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-images me-1"></i> Show Images (สูงสุด 4 รูป)
+            </label>
+            <input class="form-control" type="file" multiple (change)="onFileChange($event,'show')" accept="image/*" />
+            <div *ngIf="existingShowImages.length && !deleteShowAll" class="mt-2 d-flex flex-wrap gap-2">
+              <div *ngFor="let img of existingShowImages; let i = index" class="position-relative d-inline-block">
+                <img [src]="img.url" class="img-thumbnail rounded shadow-sm" width="150" />
+                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle" (click)="removeExistingShow(i)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <button *ngIf="existingShowImages.length && !deleteShowAll" type="button" class="btn btn-sm btn-outline-danger mt-2" (click)="toggleDelete('showAll')">
+              ลบ Show Images ทั้งหมด
+            </button>
+            <div *ngIf="showFilesPreview?.length" class="mt-2 d-flex flex-wrap gap-2">
+              <div *ngFor="let img of showFilesPreview; let i = index" class="position-relative d-inline-block">
+                <img [src]="img" class="img-thumbnail rounded shadow-sm" width="150" />
+                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 rounded-circle" (click)="removeFile('show', i)">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 text-end">
+          <button type="submit" class="btn btn-success mr-2">บันทึก</button>
+          <button type="button" class="btn btn-secondary" (click)="resetForm()">รีเซ็ต</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -3,15 +3,16 @@ import { Router, RouterLink } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import Swal from 'sweetalert2';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink , RouterModule],
+  imports: [RouterLink , RouterModule,CommonModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, public  router: Router) { }
   name: string = '';
   role: string = '';
   ngOnInit() {

@@ -16,6 +16,7 @@ interface Dog {
   statusBreeding: string;
   statusSale: string;
   profileImage: string;
+  pedigreePDF: string;
 }
 
 interface DogResponse {
@@ -97,6 +98,7 @@ export class ViewDogsComponent {
         next: (response) => {
           this.dogs = response.data.map(dog => ({
             ...dog,
+            pedigreePDF: dog.pedigreePDF,
             profileImage: dog.profileImage
               ? `${this.profileImageBaseUrl}${dog.profileImage}`
               : `${this.profileImageBaseUrl}default.jpg`
@@ -301,4 +303,10 @@ export class ViewDogsComponent {
         return gender;
     }
   }
+  downloadPedigree(dog: any) {
+    const url = `${config.apiServer}/uploads/dogs/pedigreePdf/${dog.pedigreePDF}`;
+    window.open(url, '_blank');
+  }
+
+
 }

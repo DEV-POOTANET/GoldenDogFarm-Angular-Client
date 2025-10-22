@@ -58,11 +58,22 @@
         <li class="nav-header"><b>ระบบจัดการข้อมูลสุนัข</b></li>
 
         <li class="nav-item">
-          <a routerLink="/view-dogs" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-             class="nav-link">
+          <a
+            [routerLink]="['/view-dogs']"
+            [ngClass]="{
+              'active':
+                router.url.startsWith('/view-dogs') ||
+                router.url.startsWith('/add-dog') ||
+                router.url.startsWith('/edit-dog') ||
+                router.url.startsWith('/manage-position') ||
+                router.url.startsWith('/view-dogdtl')
+            }"
+            class="nav-link"
+          >
             <i class="nav-icon fa-solid fa-shield-dog"></i>
             <p>จัดการข้อมูลสุนัข</p>
           </a>
+
         </li>
 
         <li class="nav-item">
