@@ -43,15 +43,15 @@
           </a>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="role === 'A'">
           <a routerLink="/users" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">
             <i class="nav-icon fa fa-users"></i>
             <p>จัดการข้อมูลพนักงาน</p>
           </a>
         </li>
-
+        <hr>
       </ul>
-      <hr>
+
 
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
@@ -83,9 +83,9 @@
             <p>จัดการข้อมูลการผสมพันธ์ุ</p>
           </a>
         </li>
-
+        <hr>
       </ul>
-      <hr>
+
 
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
@@ -99,24 +99,24 @@
           </a>
         </li>
 
-        <li class="nav-item">
-          <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+        <li class="nav-item" *ngIf="role === 'A'">
+          <a routerLink="/reservations" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
              class="nav-link">
             <i class="nav-icon fa-solid fa-file"></i>
             <p>จัดการข้อมูลการจอง</p>
           </a>
         </li>
 
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="role === 'A'">
           <a routerLink="/dogcolor" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
              class="nav-link">
             <i class="nav-icon fa-solid fa-file"></i>
             <p>จัดการข้อมูลการขาย</p>
           </a>
         </li>
-
+        <hr>
       </ul>
-      <hr>
+
 
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
@@ -145,12 +145,12 @@
             <p>จัดการข้อมูลการรักษา</p>
           </a>
         </li>
-
+        <hr>
       </ul>
-      <hr>
 
 
-      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" *ngIf="role === 'A'">
 
         <li class="nav-header"><b>การตั้งค่าข้อมูลพื้นฐานด้านสุขภาพ</b></li>
 
@@ -194,12 +194,12 @@
           </a>
         </li>
 
-
+        <hr>
       </ul>
-      <hr>
 
 
-      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" *ngIf="role === 'A'">
 
         <li class="nav-header"><b>การตั้งค่าข้อมูลพื้นฐานสุนัข</b></li>
 
@@ -218,9 +218,9 @@
             <p>จัดการข้อมูลตำแหน่งสุนัข</p>
           </a>
         </li>
-
+        <hr >
       </ul>
-      <hr>
+
 
       <ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" data-widget="treeview" role="menu"
           data-accordion="false">

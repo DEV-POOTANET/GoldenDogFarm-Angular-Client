@@ -1,0 +1,465 @@
+<div class="container-fluid py-4">
+  <!-- Header Card -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h4 class="mb-0 text-primary fw-bold">
+            <i class="fas fa-book me-2"></i>จัดการการจอง
+          </h4>
+          <button
+            class="btn btn-primary ms-auto"
+            data-bs-toggle="modal"
+            data-bs-target="#modalAddReservation"
+            (click)="resetForm()">
+            <i class="fa fa-plus me-1"></i>เพิ่มข้อมูลการจอง
+          </button>
+        </div>
+
+        <!-- Search & Filter Section -->
+        <div class="card-body">
+          <div class="row mb-4 gx-2 gy-3 flex-wrap">
+            <!-- Search by Customer Name -->
+            <div class="col-12 col-md-4 col-lg-3">
+              <label class="fw-semibold">ค้นหาตามชื่อลูกค้า</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-search text-muted"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control border-start-0 ps-0"
+                  placeholder="กรอกชื่อลูกค้า..."
+                  [(ngModel)]="searchCusName"
+                  (keyup.enter)="searchReservations()">
+              </div>
+            </div>
+
+            <!-- Search by Status -->
+            <div class="col-12 col-md-4 col-lg-3">
+              <label class="fw-semibold">ค้นหาตามสถานะ</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-search text-muted"></i>
+                </span>
+                <select class="form-control border-start-0 ps-0" [(ngModel)]="searchStatus">
+                  <option value="">ทั้งหมด</option>
+                  <option value="1">จองแล้ว</option>
+                  <option value="2">ถูกยกเลิก</option>
+                  <option value="3">รอคืนมัดจำ</option>
+                  <option value="4">จำหน่ายแล้ว</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Search by Deposit Status -->
+            <div class="col-12 col-md-4 col-lg-3">
+              <label class="fw-semibold">ค้นหาตามสถานะเงินมัดจำ</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-search text-muted"></i>
+                </span>
+                <select class="form-control border-start-0 ps-0" [(ngModel)]="searchDepositStatus">
+                  <option value="">ทั้งหมด</option>
+                  <option value="1">รอคืน</option>
+                  <option value="2">คืนแล้ว</option>
+                  <option value="3">ยึดเงินมัดจำ</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Page Size -->
+            <div class="col-12 col-md-4 col-lg-1">
+              <label class="fw-semibold">จำนวนต่อหน้า</label>
+              <select
+                class="form-select"
+                [(ngModel)]="pageSize"
+                (change)="changePageSize()">
+                <option [value]="5">5</option>
+                <option [value]="10">10</option>
+                <option [value]="20">20</option>
+                <option [value]="50">50</option>
+              </select>
+            </div>
+
+            <!-- Search Button -->
+            <div class="col-12 col-md-12 col-lg-2 d-flex align-items-end">
+              <button
+                class="btn btn-primary w-100 mt-3 mt-lg-0"
+                (click)="searchReservations()"
+                [disabled]="loading">
+                <i class="fas fa-search me-2"></i>ค้นหา
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Table Card -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <!-- Loading Spinner -->
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">กำลังโหลด...</span>
+            </div>
+            <p class="mt-2 text-muted">กำลังโหลดข้อมูล...</p>
+          </div>
+
+          <!-- Table -->
+          <div *ngIf="!loading" class="table-responsive">
+            <table class="table table-hover align-middle table-sm">
+              <thead class="table-light">
+              <tr>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-hashtag me-1"></i>ID</th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-paw me-1"></i>ครอก (วันคลอด)</th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-dog me-1"></i>ชื่อสุนัข</th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-user me-1"></i>ชื่อลูกค้า</th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-user-cog me-1"></i>ชื่อผู้ใช้</th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-calendar-alt me-1"></i>วันที่จอง</th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-money-bill me-1"></i>เงินมัดจำ</th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-circle me-1"></i>สถานะ</th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-exclamation-triangle me-1"></i>เหตุผลยกเลิก</th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-money-check me-1"></i>สถานะเงินมัดจำ</th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-calendar-times me-1"></i>วันที่ยกเลิก</th>
+                <th scope="col" class="fw-semibold text-dark text-nowrap"><i class="fas fa-gear me-1"></i>จัดการ</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr
+                *ngFor="let reservation of reservations; let i = index"
+                class="border-bottom"
+                [class.table-active]="i % 2 === 0">
+
+                <td class="text-nowrap">
+                  <span class="badge bg-light text-dark px-2 py-1">{{ reservation.id }}</span>
+                </td>
+
+                <td class="text-nowrap text-truncate">
+                  <span class="text-muted">
+                    {{ reservation.breedId && reservation.breedDueDate
+                                      ? "ID:" + reservation.breedId + " -> " + reservation.breedDueDate
+                                      : '-' }}
+                  </span>
+
+                </td>
+
+                <td class="text-nowrap">
+                  <div class="d-flex align-items-center">
+
+                    <span class="fw-medium text-truncate" style="max-width: 200px;">
+                        {{ reservation.dogName || '-' }}
+                      </span>
+                  </div>
+                </td>
+
+                <td class="text-nowrap text-truncate" style="max-width: 200px;">
+                  <span class="text-muted">{{ reservation.cusName }}</span>
+                </td>
+
+                <td class="text-nowrap text-truncate" style="max-width: 200px;">
+                  <span class="text-muted">{{ reservation.userName }}</span>
+                </td>
+
+                <td class="text-nowrap">
+                  <span class="text-muted">{{ reservation.date }}</span>
+                </td>
+
+                <td class="text-nowrap">
+                  <span class="text-muted">{{ reservation.deposit | number:'1.2-2' }}</span>
+                </td>
+
+                <td class="text-nowrap">
+                    <span class="badge" [class]="reservation.status === '1' ? 'bg-primary' : reservation.status === '2' ? 'bg-danger' : reservation.status === '3' ? 'bg-warning' : 'bg-success'">
+                      {{ getStatusText(reservation.status) }}
+                    </span>
+                </td>
+
+                <td class="text-nowrap">
+                    <span class="badge bg-secondary">
+                      {{ getCancelReasonText(reservation.cancelReason) }}
+                    </span>
+                </td>
+
+                <td class="text-nowrap">
+                    <span class="badge" [class]="reservation.depositStatus === '1' ? 'bg-warning' : reservation.depositStatus === '2' ? 'bg-success' : 'bg-danger'">
+                      {{ getDepositStatusText(reservation.depositStatus) }}
+                    </span>
+                </td>
+
+                <td class="text-nowrap">
+                  <span class="text-muted">{{ reservation.cancelDate || '-' }}</span>
+                </td>
+
+
+
+                <td class="text-nowrap">
+                  <button
+                    class="btn btn-warning btn-sm me-2"
+                    (click)="editReservation(reservation)"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalAddReservation">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <button
+                    *ngIf="+reservation.status === 1"
+                    class="btn btn-success btn-sm me-2"
+                    (click)="editReservation(reservation)">
+                    <i class="fa-solid fa-money-bills mr-2"></i> สร้างการขาย
+                  </button>
+                  <button
+                    *ngIf="+reservation.status === 1"
+                    class="btn btn-info btn-sm me-2"
+                    (click)="generatePDF(reservation.id)">
+                    <i class="fa-solid fa-file-pdf"></i>
+                  </button>
+
+                </td>
+              </tr>
+              </tbody>
+            </table>
+
+            <!-- No Data Message -->
+            <div *ngIf="reservations.length === 0" class="text-center py-5">
+              <i class="fas fa-book fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted">ไม่พบข้อมูลการจอง</h5>
+              <p class="text-muted">ลองปรับเปลี่ยนเงื่อนไขการค้นหาใหม่</p>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div
+            *ngIf="!loading && reservations.length > 0"
+            class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+
+            <div class="text-muted mb-2 mb-md-0">
+              แสดง {{ ((currentPage - 1) * pageSize) + 1 }} -
+              {{ Math.min(currentPage * pageSize, totalRecords) }}
+              จาก {{ totalRecords }} รายการ
+            </div>
+
+            <nav aria-label="Page navigation" *ngIf="totalPages > 1">
+              <ul class="pagination pagination-sm mb-0 flex-wrap">
+                <li class="page-item" [class.disabled]="currentPage === 1">
+                  <button
+                    class="page-link"
+                    (click)="goToPage(currentPage - 1)"
+                    [disabled]="currentPage === 1">
+                    <i class="fas fa-chevron-left"></i>
+                  </button>
+                </li>
+
+                <li
+                  class="page-item"
+                  *ngFor="let page of getPageNumbers()"
+                  [class.active]="page === currentPage">
+                  <button
+                    class="page-link"
+                    (click)="goToPage(page)"
+                    [class.bg-primary]="page === currentPage"
+                    [class.text-white]="page === currentPage">
+                    {{ page }}
+                  </button>
+                </li>
+
+                <li class="page-item" [class.disabled]="currentPage === totalPages">
+                  <button
+                    class="page-link"
+                    (click)="goToPage(currentPage + 1)"
+                    [disabled]="currentPage === totalPages">
+                    <i class="fas fa-chevron-right"></i>
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add/Edit Modal -->
+<app-my-modal
+  modalId="modalAddReservation"
+  [title]="modalTitle"
+  [icon]="modalIcon">
+
+  <form #reservationForm="ngForm" (ngSubmit)="onSubmit(reservationForm)">
+    <!-- Breeding Selection -->
+    <div class="mt-3">
+      <label class="form-label fw-semibold">ครอกผสมพันธุ์</label>
+      <select
+        [(ngModel)]="formReservation.breedId"
+        name="breedId"
+        class="form-control"
+        [disabled]="isEditMode">
+        <option [value]="null">ไม่ระบุ</option>
+        <option *ngFor="let breeding of breedings" [value]="breeding.id">{{ "ID :"  + breeding.id +": "+ breeding.name}}</option>
+      </select>
+    </div>
+
+    <!-- Dog Selection -->
+    <div class="mt-3">
+      <label class="form-label fw-semibold">สุนัข</label>
+      <select
+        [(ngModel)]="formReservation.dogId"
+        name="dogId"
+        class="form-control"
+        [disabled]="isEditMode">
+        <option [value]="null">ไม่ระบุ</option>
+        <option *ngFor="let dog of dogs" [value]="dog.id">{{ dog.name }}</option>
+      </select>
+    </div>
+
+    <!-- Customer Selection -->
+    <div class="mt-3">
+      <label class="form-label fw-semibold">ลูกค้า <span class="text-danger">*</span></label>
+      <select
+        [(ngModel)]="formReservation.cusId"
+        name="cusId"
+        #cusId="ngModel"
+        class="form-control"
+        required
+        [disabled]="isEditMode">
+        <option value="">เลือกลูกค้า</option>
+        <option *ngFor="let customer of customers" [value]="customer.id">{{ customer.name }}</option>
+      </select>
+      <small class="text-danger" *ngIf="cusId.invalid && cusId.touched">
+        กรุณาเลือกลูกค้า
+      </small>
+    </div>
+
+    <!-- User Selection -->
+    <div class="mt-3">
+      <label class="form-label fw-semibold">ผู้ใช้ <span class="text-danger">*</span></label>
+      <select
+        [(ngModel)]="formReservation.userId"
+        name="userId"
+        #userId="ngModel"
+        class="form-control"
+        required
+        [disabled]="isEditMode">
+        <option value="">เลือกผู้ใช้</option>
+        <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+      </select>
+      <small class="text-danger" *ngIf="userId.invalid && userId.touched">
+        กรุณาเลือกผู้ใช้
+      </small>
+    </div>
+
+    <!-- Reservation Date -->
+    <div class="mt-3">
+      <label class="form-label fw-semibold">วันที่จอง <span class="text-danger">*</span></label>
+      <input
+        type="date"
+        [(ngModel)]="formReservation.date"
+        name="date"
+        #date="ngModel"
+        class="form-control"
+        required />
+      <small class="text-danger" *ngIf="date.invalid && date.touched">
+        กรุณากรอกวันที่จอง
+      </small>
+    </div>
+
+    <!-- Deposit -->
+    <div class="mt-3">
+      <label class="form-label fw-semibold">เงินมัดจำ <span class="text-danger">*</span></label>
+      <input
+        type="number"
+        step="0.01"
+        [(ngModel)]="formReservation.deposit"
+        name="deposit"
+        #deposit="ngModel"
+        class="form-control"
+        required />
+      <small class="text-danger" *ngIf="deposit.invalid && deposit.touched">
+        กรุณากรอกเงินมัดจำ
+      </small>
+    </div>
+
+    <!-- Status -->
+    <div class="mt-3">
+      <label class="form-label fw-semibold">สถานะ <span class="text-danger">*</span></label>
+      <select
+        [(ngModel)]="formReservation.status"
+        name="status"
+        #status="ngModel"
+        class="form-control"
+        required>
+        <option value="1">จองแล้ว</option>
+        <option value="2">ถูกยกเลิก</option>
+        <option value="3">รอคืนมัดจำ</option>
+        <option value="4">จำหน่ายแล้ว</option>
+      </select>
+      <small class="text-danger" *ngIf="status.invalid && status.touched">
+        กรุณาเลือกสถานะ
+      </small>
+    </div>
+
+    <!-- Cancel Reason -->
+    <div class="mt-3">
+      <label class="form-label fw-semibold">เหตุผลการยกเลิก</label>
+      <select
+        [(ngModel)]="formReservation.cancelReason"
+        name="cancelReason"
+        class="form-control">
+        <option [ngValue]="null">ไม่ระบุ</option>
+        <option value="1">ลูกค้าผิดเงื่อนไข</option>
+        <option value="2">ปัญหาจากฟาร์ม</option>
+      </select>
+    </div>
+
+    <!-- Deposit Status -->
+    <div class="mt-3">
+      <label class="form-label fw-semibold">สถานะเงินมัดจำ</label>
+      <select
+        [(ngModel)]="formReservation.depositStatus"
+        name="depositStatus"
+        class="form-control">
+        <option [ngValue]="null">ไม่ระบุ</option>
+        <option value="1">รอคืน</option>
+        <option value="2">คืนแล้ว</option>
+        <option value="3">ยึดเงินมัดจำ</option>
+      </select>
+    </div>
+
+    <!-- Cancel Date -->
+    <div class="mt-3">
+      <label class="form-label fw-semibold">วันที่ยกเลิก</label>
+      <input
+        type="date"
+        [(ngModel)]="formReservation.cancelDate"
+        name="cancelDate"
+        class="form-control" />
+    </div>
+
+    <!-- Notes -->
+    <div class="mt-3">
+      <label class="form-label fw-semibold">โน้ต</label>
+      <textarea
+        [(ngModel)]="formReservation.notes"
+        name="notes"
+        class="form-control"
+        rows="3"></textarea>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer mt-3">
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="reservationForm.invalid">
+        {{ submitButtonText }}
+      </button>
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        ยกเลิก
+      </button>
+    </div>
+  </form>
+</app-my-modal>
