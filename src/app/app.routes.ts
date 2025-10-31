@@ -17,6 +17,7 @@ import {ViewDogdtlComponent} from './dogs/view-dogdtl/view-dogdtl.component';
 import {VaccinationsComponent} from './vaccinations/vaccinations.component';
 import {DogHealthChecksComponent} from './dog-health-checks/dog-health-checks.component';
 import {TreatmentRecordsComponent} from './treatment-records/treatment-records.component';
+import {BreedingComponent} from './breeding/breeding.component';
 
 export const routes: Routes = [
   {
@@ -91,5 +92,9 @@ export const routes: Routes = [
   {
     path: 'treatmentRecords',
     component: TreatmentRecordsComponent,
+  },
+  {
+    path: 'breeding',
+    component: BreedingComponent,
   }
 ];
